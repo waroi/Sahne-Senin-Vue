@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <RouterView />
+    <RouterView />
 </template>
 
 <style scoped>
+
 nav {
   font-size: 12px;
   text-align: center;
@@ -35,6 +36,7 @@ nav a:first-of-type {
 }
 
 @media (min-width: 1024px) {
+
   nav {
     text-align: left;
     margin-left: -1rem;

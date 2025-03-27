@@ -1,61 +1,81 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import type { Todo } from "../models/Todo";
+import { ref, computed } from 'vue';
+import type { Todo } from '@/models/Todo';
 
+// Bileşen prop'ları
 const props = defineProps<{
   todo: Todo;
 }>();
+
+// Olaylar
 const emit = defineEmits<{
   toggle: [id: number];
   delete: [id: number];
   edit: [id: number, text: string];
 }>();
-function toggleComplete() {
-  emit("toggle", props.todo.id);
-}
-const editText = ref("");
-const isEditing = ref(false);
 
+// Düzenleme durumu için yerel state
+const isEditing = ref(false);
+const editText = ref('');
+
+// Düzenleme modunu aç
 function startEdit() {
   editText.value = props.todo.text;
   isEditing.value = true;
 }
+
+// Düzenlemeyi kaydet
+function saveEdit() {
+  if (editText.value.trim()) {
+    emit('edit', props.todo.id, editText.value);
+    isEditing.value = false;
+  }
+}
+
+// Düzenlemeyi iptal et (Esc tuşu ile)
 function cancelEdit() {
   isEditing.value = false;
 }
-function saveEdit() {
-  if (editText.value.trim()) {
-    emit("edit", props.todo.id, editText.value);
-  }
+
+// Checkbox durumunu değiştir
+function toggleComplete() {
+  emit('toggle', props.todo.id);
 }
 </script>
 
 <template>
   <div class="todo-item" :class="{ completed: todo.completed }">
     <div v-if="!isEditing" class="todo-view">
+      <!-- Tamamlandı işaretleme checkbox'ı -->
       <div class="todo-checkbox" @click="toggleComplete">
         <div class="checkmark" :class="{ checked: todo.completed }"></div>
       </div>
+      
+      <!-- Görev içeriği -->
       <div class="todo-content" @dblclick="startEdit">
-        <div class="todo-text">{{ props.todo.text }}</div>
-        <div class="todo-category">{{ props.todo.category }}</div>
-        <div class="todo-date">
-          {{ new Date(todo.createdAt).toLocaleDateString("tr-TR") }}
-        </div>
+        <span class="todo-text">{{ todo.text }}</span>
+        <span class="todo-category">{{ todo.category }}</span>
+        <span class="todo-date">{{ new Date(todo.createdAt).toLocaleDateString('tr-TR') }}</span>
       </div>
+      
+      <!-- Silme butonu -->
+      <button class="delete-btn" @click="emit('delete', todo.id)">
+        <span>&times;</span>
+      </button>
     </div>
-    <button class="delete-btn" @click="$emit('delete', todo.id)">
-      &times;
-    </button>
-  </div>
-  <div v-if="isEditing" class="todo-edit">
-    <input
-      type="text"
-      v-model="editText"
-      ref="editInput"
-      @blur="cancelEdit"
-      @keyup.enter="saveEdit"
-    />
+    
+    <!-- Düzenleme modu -->
+    <div v-else class="todo-edit">
+      <input
+        type="text"
+        v-model="editText"
+        @blur="saveEdit"
+        @keyup.enter="saveEdit"
+        @keyup.esc="cancelEdit"
+        ref="editInput"
+        autofocus
+      />
+    </div>
   </div>
 </template>
 
@@ -115,7 +135,7 @@ function saveEdit() {
 }
 
 .checkmark.checked {
-  background-color: #4caf50;
+  background-color: #4CAF50;
 }
 
 .checkmark.checked:after {
@@ -185,6 +205,6 @@ function saveEdit() {
 }
 
 .todo-edit input:focus {
-  border-color: #4caf50;
+  border-color: #4CAF50;
 }
-</style>
+</style> 

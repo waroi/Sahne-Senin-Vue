@@ -1,49 +1,49 @@
 <script setup lang="ts">
-import { useTodoStore } from "@/stores/todo";
+import { useTodoStore } from '@/stores/todo';
 
 const todoStore = useTodoStore();
 </script>
 
 <template>
   <div class="todo-filters">
+    <!-- Durum filtreleri -->
     <div class="status-filters">
-      <button
-        :class="{ active: todoStore.filter === 'all' }"
+      <button 
+        :class="{ active: todoStore.filter === 'all' }" 
         @click="todoStore.setFilter('all')"
       >
         Tümü <span class="count">{{ todoStore.totalCount }}</span>
       </button>
-
-      <button
-        :class="{ active: todoStore.filter === 'active' }"
+      
+      <button 
+        :class="{ active: todoStore.filter === 'active' }" 
         @click="todoStore.setFilter('active')"
       >
         Aktif <span class="count">{{ todoStore.activeCount }}</span>
       </button>
-
-      <button
-        :class="{ active: todoStore.filter === 'completed' }"
+      
+      <button 
+        :class="{ active: todoStore.filter === 'completed' }" 
         @click="todoStore.setFilter('completed')"
       >
-        Tamamlanan <span class="count">{{ todoStore.complatedCount }}</span>
+        Tamamlanan <span class="count">{{ todoStore.completedCount }}</span>
       </button>
     </div>
-
+    
+    <!-- Kategori filtreleri -->
     <div class="category-filter">
-      <select
-        v-model="todoStore.selectedCategory"
-        @change="todoStore.setCategory(todoStore.selectedCategory)"
-      >
+      <select v-model="todoStore.selectedCategory" @change="todoStore.setCategory(todoStore.selectedCategory)">
         <option value="">Tüm Kategoriler</option>
         <option v-for="category in todoStore.categories" :key="category">
           {{ category }}
         </option>
       </select>
-
-      <button
-        class="clear-btn"
-        @click="todoStore.clearCompleted()"
-        :disabled="todoStore.complatedCount === 0"
+      
+      <!-- Tamamlananları temizle butonu -->
+      <button 
+        class="clear-btn" 
+        @click="todoStore.clearCompleted()" 
+        :disabled="todoStore.completedCount === 0"
       >
         Tamamlananları Temizle
       </button>
@@ -78,9 +78,9 @@ const todoStore = useTodoStore();
 }
 
 .status-filters button.active {
-  background-color: #4caf50;
+  background-color: #4CAF50;
   color: white;
-  border-color: #4caf50;
+  border-color: #4CAF50;
 }
 
 .count {
@@ -131,4 +131,4 @@ const todoStore = useTodoStore();
   color: #999;
   cursor: not-allowed;
 }
-</style>
+</style> 

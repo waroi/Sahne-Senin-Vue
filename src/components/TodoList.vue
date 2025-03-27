@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useTodoStore } from "../stores/todo";
-import TodoItem from "./TodoItem.vue";
-import TodoForm from "./TodoForm.vue";
-import TodoFilter from "./TodoFilter.vue";
+import { onMounted } from 'vue';
+import { useTodoStore } from '@/stores/todo';
+import TodoItem from './TodoItem.vue';
+import TodoForm from './TodoForm.vue';
+import TodoFilter from './TodoFilter.vue';
 
 const todoStore = useTodoStore();
 
-onMounted(() => todoStore.fetchTodos());
+// Bileşen yüklendiğinde görevleri getir
+onMounted(() => {
+  todoStore.fetchTodos();
+});
 
+// Görev işlemleri
 const toggleTodo = (id: number) => {
   todoStore.toggleTodo(id);
 };
@@ -24,17 +28,30 @@ const editTodo = (id: number, text: string) => {
 
 <template>
   <div class="todo-container">
-    <h1>Sahne Senin Vue Todo</h1>
+    <h1>Vue3 Yapılacaklar Listesi</h1>
+    
+    <!-- Görev ekleme formu -->
     <TodoForm />
-
+    
+    <!-- Filtreler -->
     <TodoFilter />
-
-    <div v-if="todoStore.loading" class="loading">Yükleniyor</div>
-    <div v-if="todoStore.error" class="loading">{{ todoStore.error }}</div>
+    
+    <!-- Yükleniyor durumu -->
+    <div v-if="todoStore.loading" class="loading">
+      Yükleniyor...
+    </div>
+    
+    <!-- Hata mesajı -->
+    <div v-if="todoStore.error" class="error">
+      {{ todoStore.error }}
+    </div>
+    
+    <!-- Görev listesi -->
     <div v-if="!todoStore.loading && !todoStore.error">
-      <div v-if="!todoStore.filteredTodos.length === 0" class="empty-state">
-        Gösterilecek Görev Yok!
+      <div v-if="todoStore.filteredTodos.length === 0" class="empty-state">
+        Gösterilecek görev yok!
       </div>
+      
       <TodoItem
         v-for="todo in todoStore.filteredTodos"
         :key="todo.id"
@@ -59,9 +76,7 @@ h1 {
   margin-bottom: 2rem;
 }
 
-.loading,
-.error,
-.empty-state {
+.loading, .error, .empty-state {
   padding: 2rem;
   text-align: center;
   background-color: white;
@@ -70,7 +85,7 @@ h1 {
 }
 
 .loading {
-  color: #2196f3;
+  color: #2196F3;
 }
 
 .error {
@@ -81,4 +96,4 @@ h1 {
   color: #9e9e9e;
   font-style: italic;
 }
-</style>
+</style> 

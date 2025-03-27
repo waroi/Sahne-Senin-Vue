@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import type { TodoCreateDTO } from "../models/Todo";
-import { useTodoStore } from "@/stores/todo";
+import { ref } from 'vue';
+import type { TodoCreateDTO } from '@/models/Todo';
+import { useTodoStore } from '@/stores/todo';
 
 const todoStore = useTodoStore();
 
-const newTodoText = ref("");
+// Form verileri
+const newTodoText = ref('');
 const selectedCategory = ref(todoStore.categories[0]);
 
+// Form gönderimi
 function handleSubmit() {
   if (!newTodoText.value.trim()) return;
-
+  
   const newTodo: TodoCreateDTO = {
-    text: newTodoText.value,
+    text: newTodoText.value.trim(),
     completed: false,
     category: selectedCategory.value,
   };
+  
   todoStore.addTodo(newTodo);
-
-  newTodoText.value = "";
+  
+  // Formu temizle
+  newTodoText.value = '';
   selectedCategory.value = todoStore.categories[0];
 }
 </script>
@@ -32,14 +36,14 @@ function handleSubmit() {
         placeholder="Yeni görev ekle..."
         autofocus
       />
-
+      
       <select v-model="selectedCategory">
         <option v-for="category in todoStore.categories" :key="category">
           {{ category }}
         </option>
       </select>
     </div>
-
+    
     <button type="submit" :disabled="!newTodoText.trim()">Ekle</button>
   </form>
 </template>
@@ -59,8 +63,7 @@ function handleSubmit() {
   gap: 0.5rem;
 }
 
-input,
-select {
+input, select {
   padding: 0.75rem;
   border: 1px solid #ddd;
   border-radius: 0.25rem;
@@ -73,9 +76,8 @@ input {
   flex: 1;
 }
 
-input:focus,
-select:focus {
-  border-color: #4caf50;
+input:focus, select:focus {
+  border-color: #4CAF50;
 }
 
 button {
@@ -83,7 +85,7 @@ button {
   padding: 0.75rem;
   border: none;
   border-radius: 0.25rem;
-  background-color: #4caf50;
+  background-color: #4CAF50;
   color: white;
   font-size: 1rem;
   font-weight: bold;
@@ -99,4 +101,4 @@ button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
-</style>
+</style> 
